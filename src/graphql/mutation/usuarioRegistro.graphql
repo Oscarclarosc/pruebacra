@@ -1,0 +1,10 @@
+mutation usuarioRegistro($options: UsuarioRegistro!) {
+  usuarioRegistro(options: $options) {
+    id
+    email
+    errores {
+      campo
+      mensaje
+    }
+  }
+}

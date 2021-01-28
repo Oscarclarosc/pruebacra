@@ -1,0 +1,9 @@
+query usuarioYo {
+  usuarioYo {
+    email
+    error {
+      campo
+      mensaje
+    }
+  }
+}

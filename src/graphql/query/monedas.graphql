@@ -1,0 +1,9 @@
+query monedas {
+  monedas {
+    id
+    nombre
+    simbolo
+    codigo
+    eliminado
+  }
+}

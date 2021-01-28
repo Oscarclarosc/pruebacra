@@ -1,0 +1,10 @@
+mutation usuarioLogin($options: UsuarioLogin!) {
+  usuarioLogin(options: $options) {
+    id
+    email
+    errores {
+      campo
+      mensaje
+    }
+  }
+}
