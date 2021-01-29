@@ -3,6 +3,9 @@ import Rutas from "./routes/rutas";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { ApolloProvider } from "@apollo/client";
 
+import { ThemeProvider } from "@material-ui/core/styles";
+import theme from "./utils/temaConfig";
+
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphQL",
   credentials: "include",
@@ -12,7 +15,9 @@ const client = new ApolloClient({
 function App() {
   return (
     <ApolloProvider client={client}>
-      <Rutas></Rutas>
+      <ThemeProvider theme={theme}>
+        <Rutas></Rutas>
+      </ThemeProvider>
     </ApolloProvider>
   );
 }
