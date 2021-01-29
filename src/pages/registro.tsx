@@ -22,6 +22,8 @@ import { useForm } from "react-hook-form";
 import { Copyright } from "../components/copyright";
 
 import { Link } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { usuarioRegistro } from "../common/validation/usuario.validation";
 
 interface registroProps {}
 
@@ -50,7 +52,9 @@ type inputs = UsuarioRegistro;
 const Registro: React.FC<registroProps> = () => {
   const classes = useStyles();
   const router = useHistory();
-  const { register, handleSubmit } = useForm<inputs>();
+  const { register, handleSubmit, errors } = useForm<inputs>({
+    resolver: yupResolver(usuarioRegistro),
+  });
   const [Registro, { loading }] = useUsuarioRegistroMutation();
 
   const onSubmit = async (data: inputs) => {
@@ -61,6 +65,8 @@ const Registro: React.FC<registroProps> = () => {
     });
     if (!results?.data?.usuarioRegistro.errores) {
       router.push("/tablero");
+    } else {
+      console.log(results?.data?.usuarioRegistro.errores);
     }
   };
 
@@ -87,13 +93,10 @@ const Registro: React.FC<registroProps> = () => {
                 label="Email"
                 name="email"
                 autoComplete="email"
-                inputRef={register({
-                  required: {
-                    value: true,
-                    message: "*Email necesario*",
-                  },
-                })}
+                error={errors?.email ? true : false}
+                inputRef={register()}
               />
+              <Typography color="error">{errors?.email?.message}</Typography>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -105,13 +108,10 @@ const Registro: React.FC<registroProps> = () => {
                 type="password"
                 id="clave"
                 autoComplete="current-password"
-                inputRef={register({
-                  required: {
-                    value: true,
-                    message: "*Clave necesaria*",
-                  },
-                })}
+                error={errors?.clave ? true : false}
+                inputRef={register()}
               />
+              <Typography color="error">{errors?.clave?.message}</Typography>
             </Grid>
           </Grid>
           <Button

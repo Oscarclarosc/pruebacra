@@ -19,6 +19,9 @@ import { useForm } from "react-hook-form";
 import { useUsuarioLoginMutation, UsuarioLogin } from "../generated/graphql";
 import { Copyright } from "../components/copyright";
 
+import { yupResolver } from "@hookform/resolvers/yup";
+import { usuarioLogin } from "../common/validation/usuario.validation";
+
 type inputs = UsuarioLogin;
 
 const useStyles = makeStyles((theme) => ({
@@ -44,7 +47,9 @@ const useStyles = makeStyles((theme) => ({
 const Ingresar = () => {
   const classes = useStyles();
 
-  const { register, handleSubmit, errors } = useForm<inputs>();
+  const { register, handleSubmit, errors } = useForm<inputs>({
+    resolver: yupResolver(usuarioLogin),
+  });
   const [Login, { loading }] = useUsuarioLoginMutation();
 
   const route = useHistory();
@@ -57,6 +62,8 @@ const Ingresar = () => {
     });
     if (!results.data?.usuarioLogin.errores) {
       route.push("/tablero");
+    } else {
+      console.log(results.data?.usuarioLogin.errores);
     }
   };
 
@@ -84,14 +91,10 @@ const Ingresar = () => {
             autoComplete="email"
             autoFocus
             error={errors?.email ? true : false}
-            inputRef={register({
-              required: {
-                value: true,
-                message: "*Email necesario*",
-              },
-            })}
+            inputRef={register()}
           />
           <Typography color="error">{errors?.email?.message}</Typography>
+
           <TextField
             variant="outlined"
             margin="normal"
@@ -103,12 +106,7 @@ const Ingresar = () => {
             id="clave"
             autoComplete="current-password"
             error={errors?.clave ? true : false}
-            inputRef={register({
-              required: {
-                value: true,
-                message: "Clave necesaria",
-              },
-            })}
+            inputRef={register()}
           />
           <Typography color="error">{errors?.clave?.message}</Typography>
           <Button
